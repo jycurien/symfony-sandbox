@@ -13,9 +13,9 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
-    <body class="bg-gray-800 text-gray-50">
-        <nav class="bg-gray-800">
-            <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+    <body class="bg-gray-800 text-gray-50 flex flex-col min-h-screen">
+        <nav class="bg-gray-900">
+            <div class="mx-auto max-w-6xl px-2 sm:px-6 lg:px-8">
                 <div class="relative flex h-16 items-center justify-between">
                     <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
                         <!-- Mobile menu button-->
@@ -64,8 +64,11 @@
                 </div>
             </div>
         </nav>
-        <main>
+        <main class="mt-6 mb-6 flex-1 container mx-auto max-w-6xl px-2 sm:px-6 lg:px-8">
             {% block body %}{% endblock %}
         </main>
+        <footer class="bg-gray-900 p-4">
+            <p class="text-center">&copy; 2023</p>
+        </footer>
     </body>
 </html>
