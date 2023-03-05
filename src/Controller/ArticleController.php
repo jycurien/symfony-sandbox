@@ -13,7 +13,7 @@ class ArticleController extends AbstractController
     public function index(ArticleRepository $repository)
     {
         // TODO
-        dd($repository->findAll());
+        dd($repository->findLatest());
     }
 
     #[Route(path: '/articles/{slug}', name: 'article_show')]
