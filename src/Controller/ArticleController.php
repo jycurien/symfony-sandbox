@@ -12,14 +12,12 @@ class ArticleController extends AbstractController
     #[Route(path: '/articles', name: 'article_index')]
     public function index(ArticleRepository $repository)
     {
-        // TODO
-        dd($repository->findLatest());
+        return $this->render('article/index.html.twig', ['articles' => $repository->findLatest()]);
     }
 
     #[Route(path: '/articles/{slug}', name: 'article_show')]
     public function show(Article $article)
     {
-        // TODO
-        dd($article);
+        return $this->render('article/show.html.twig', ['article' => $article]);
     }
 }
