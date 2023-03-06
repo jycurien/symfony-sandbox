@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ArticleController extends AbstractController
 {
     #[Route(path: '/', name: 'index', methods: ['GET'])]
-    public function index(ArticleRepository $repository)
+    public function index(ArticleRepository $repository): Response
     {
         return $this->render('admin/article/index.html.twig', ['articles' => $repository->findLatest()]);
     }
@@ -40,7 +40,7 @@ class ArticleController extends AbstractController
     }
 
     #[Route(path: '/{slug}', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, EntityManagerInterface $entityManager, Article $article)
+    public function edit(Request $request, EntityManagerInterface $entityManager, Article $article): Response
     {
         $form = $this->createForm(ArticleType::class, $article);
 
@@ -57,7 +57,7 @@ class ArticleController extends AbstractController
     }
 
     #[Route(path: '/{slug}', name: 'delete', methods: ['DELETE'])]
-    public function delete(Request $request, EntityManagerInterface $entityManager, Article $article)
+    public function delete(Request $request, EntityManagerInterface $entityManager, Article $article): Response
     {
         $submittedToken = $request->request->get('token');
 
