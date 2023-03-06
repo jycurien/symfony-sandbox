@@ -32,15 +32,17 @@ class StaticHtmlGenerator
         }
 
         $staticFileUrl = 'articles/' . $article->getSlug() . '.html';
-
-        if ($this->filesystem->exists($staticFileUrl)) {
-            $this->filesystem->remove($staticFileUrl);
-        }
-
         $html = $this->environment->render('article/show.html.twig', ['article' => $article]);
 
         $this->filesystem->appendToFile($staticFileUrl, $html);
 
         return $staticFileUrl;
+    }
+
+    public function deleteHtmlFile(Article $article): void
+    {
+        if ($this->filesystem->exists($article->getStaticUrl())) {
+            $this->filesystem->remove($article->getStaticUrl());
+        }
     }
 }

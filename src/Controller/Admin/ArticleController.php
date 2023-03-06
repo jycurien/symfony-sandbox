@@ -44,12 +44,15 @@ class ArticleController extends AbstractController
     }
 
     #[Route(path: '/{slug}', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, EntityManagerInterface $entityManager, Article $article)
+    public function edit(Request $request, EntityManagerInterface $entityManager, Article $article, StaticHtmlGenerator $htmlGenerator)
     {
         $form = $this->createForm(ArticleType::class, $article);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $htmlGenerator->deleteHtmlFile($article);
+            $article->setStaticUrl($htmlGenerator->generateHtmlFile($article));
+
             $entityManager->flush();
             return $this->redirectToRoute('article_show', ['slug' => $article->getSlug()]);
         }
@@ -61,11 +64,12 @@ class ArticleController extends AbstractController
     }
 
     #[Route(path: '/{slug}', name: 'delete', methods: ['DELETE'])]
-    public function delete(Request $request, EntityManagerInterface $entityManager, Article $article)
+    public function delete(Request $request, EntityManagerInterface $entityManager, Article $article, StaticHtmlGenerator $htmlGenerator)
     {
         $submittedToken = $request->request->get('token');
 
         if ($this->isCsrfTokenValid('delete-article', $submittedToken)) {
+            $htmlGenerator->deleteHtmlFile($article);
             $entityManager->remove($article);
             $entityManager->flush();
         }
