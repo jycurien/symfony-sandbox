@@ -5,7 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Article;
 use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
-use App\Service\StaticHtmlGenerator;
+use App\Service\StaticHtmlHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +22,7 @@ class ArticleController extends AbstractController
     }
 
     #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, StaticHtmlGenerator $htmlGenerator): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, StaticHtmlHandler $htmlHandler): Response
     {
         $article = new Article();
 
@@ -30,7 +30,7 @@ class ArticleController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $article->setStaticUrl($htmlGenerator->generateHtmlFile($article));
+            $article->setStaticUrl($htmlHandler->generateHtmlFile($article));
 
             $entityManager->persist($article);
             $entityManager->flush();
@@ -44,14 +44,14 @@ class ArticleController extends AbstractController
     }
 
     #[Route(path: '/{slug}', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, EntityManagerInterface $entityManager, Article $article, StaticHtmlGenerator $htmlGenerator)
+    public function edit(Request $request, EntityManagerInterface $entityManager, Article $article, StaticHtmlHandler $htmlHandler)
     {
         $form = $this->createForm(ArticleType::class, $article);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $htmlGenerator->deleteHtmlFile($article);
-            $article->setStaticUrl($htmlGenerator->generateHtmlFile($article));
+            $htmlHandler->deleteHtmlFile($article);
+            $article->setStaticUrl($htmlHandler->generateHtmlFile($article));
 
             $entityManager->flush();
             return $this->redirectToRoute('article_show', ['slug' => $article->getSlug()]);
@@ -64,12 +64,12 @@ class ArticleController extends AbstractController
     }
 
     #[Route(path: '/{slug}', name: 'delete', methods: ['DELETE'])]
-    public function delete(Request $request, EntityManagerInterface $entityManager, Article $article, StaticHtmlGenerator $htmlGenerator)
+    public function delete(Request $request, EntityManagerInterface $entityManager, Article $article, StaticHtmlHandler $htmlHandler)
     {
         $submittedToken = $request->request->get('token');
 
         if ($this->isCsrfTokenValid('delete-article', $submittedToken)) {
-            $htmlGenerator->deleteHtmlFile($article);
+            $htmlHandler->deleteHtmlFile($article);
             $entityManager->remove($article);
             $entityManager->flush();
         }
