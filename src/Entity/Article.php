@@ -27,7 +27,7 @@ class Article
     private ?string $image = null;
 
     #[ORM\Column(length: 300, unique: true, nullable: true)]
-    private ?string $static_url = null;
+    private ?string $staticUrl = null;
 
     public function getId(): ?int
     {
@@ -84,12 +84,12 @@ class Article
 
     public function getStaticUrl(): ?string
     {
-        return $this->static_url;
+        return $this->staticUrl;
     }
 
-    public function setStaticUrl(?string $static_url): self
+    public function setStaticUrl(?string $staticUrl): self
     {
-        $this->static_url = $static_url;
+        $this->staticUrl = $staticUrl;
 
         return $this;
     }
