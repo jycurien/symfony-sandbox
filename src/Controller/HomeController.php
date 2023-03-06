@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route(path: '/', name: 'home_index')]
+    #[Route(path: '/', name: 'home_index', methods: ['GET'])]
     public function index(ArticleRepository $repository): Response
     {
         return $this->render('home/index.html.twig', ['articles' => $repository->findLatest(4)]);

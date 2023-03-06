@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Blog - Add New Article{% endblock %}
+
+{% block body %}
+    <h1 class="text-6xl font-bold mb-6">Add New Article</h1>
+
+    {{ form_start(form) }}
+    <div class="text-red-500 text-xs italic">
+        {{ form_errors(form) }}
+    </div>
+    <div class="mb-6">
+        {{ form_row(form.title) }}
+    </div>
+    <div class="mb-6">
+        {{ form_row(form.slug) }}
+    </div>
+    <div class="mb-6">
+        {{ form_row(form.image) }}
+    </div>
+    <div class="mb-6">
+        {{ form_row(form.content) }}
+    </div>
+    <input type="submit" class="bg-blue-600 px-4 py-2 cursor-pointer">
+    {{ form_end(form) }}
+{% endblock %}
