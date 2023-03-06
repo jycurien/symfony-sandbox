@@ -41,7 +41,7 @@ class StaticHtmlHandler
 
     public function deleteHtmlFile(Article $article): void
     {
-        if ($this->filesystem->exists($article->getStaticUrl())) {
+        if (null !== $article->getStaticUrl() && $this->filesystem->exists($article->getStaticUrl())) {
             $this->filesystem->remove($article->getStaticUrl());
         }
     }
