@@ -4,7 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Article;
 use App\Form\ArticleType;
-use App\Repository\ArticleRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,14 +14,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class ArticleController extends AbstractController
 {
     #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]
-    public function new(Request $request, ArticleRepository $repository): Response
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $article = new Article();
 
         $form = $this->createForm(ArticleType::class, $article);
 
+        $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $repository->save($article);
+            $entityManager->persist($article);
+            $entityManager->flush();
             return $this->redirectToRoute('article_show', ['slug' => $article->getSlug()]);
         }
 
