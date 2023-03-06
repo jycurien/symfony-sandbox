@@ -7,9 +7,11 @@ use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig\Environment;
 
 #[Route(path: '/admin/articles', name: 'admin_article_')]
 class ArticleController extends AbstractController
@@ -21,7 +23,7 @@ class ArticleController extends AbstractController
     }
 
     #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, Filesystem $filesystem, Environment $environment): Response
     {
         $article = new Article();
 
@@ -29,8 +31,20 @@ class ArticleController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
+            if (!$filesystem->exists('articles')) {
+                $filesystem->mkdir('articles');
+            }
+
+            $staticFileUrl = 'articles/' . $article->getSlug() . '.html';
+            $html = $environment->render('article/show.html.twig', ['article' => $article]);
+
+            $filesystem->appendToFile($staticFileUrl, $html);
+            $article->setStaticUrl($staticFileUrl);
+
             $entityManager->persist($article);
             $entityManager->flush();
+
             return $this->redirectToRoute('article_show', ['slug' => $article->getSlug()]);
         }
 
