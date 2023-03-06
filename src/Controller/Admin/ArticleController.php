@@ -5,7 +5,6 @@ namespace App\Controller\Admin;
 use App\Entity\Article;
 use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
-use App\Service\StaticHtmlHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,13 +15,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class ArticleController extends AbstractController
 {
     #[Route(path: '/', name: 'index', methods: ['GET'])]
-    public function index(ArticleRepository $repository)
+    public function index(ArticleRepository $repository): Response
     {
         return $this->render('admin/article/index.html.twig', ['articles' => $repository->findLatest()]);
     }
 
     #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, StaticHtmlHandler $htmlHandler): Response
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $article = new Article();
 
@@ -30,11 +29,8 @@ class ArticleController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $article->setStaticUrl($htmlHandler->generateHtmlFile($article));
-
             $entityManager->persist($article);
             $entityManager->flush();
-
             return $this->redirectToRoute('article_show', ['slug' => $article->getSlug()]);
         }
 
@@ -44,15 +40,12 @@ class ArticleController extends AbstractController
     }
 
     #[Route(path: '/{slug}', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, EntityManagerInterface $entityManager, Article $article, StaticHtmlHandler $htmlHandler)
+    public function edit(Request $request, EntityManagerInterface $entityManager, Article $article): Response
     {
         $form = $this->createForm(ArticleType::class, $article);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $htmlHandler->deleteHtmlFile($article);
-            $article->setStaticUrl($htmlHandler->generateHtmlFile($article));
-
             $entityManager->flush();
             return $this->redirectToRoute('article_show', ['slug' => $article->getSlug()]);
         }
@@ -64,12 +57,11 @@ class ArticleController extends AbstractController
     }
 
     #[Route(path: '/{slug}', name: 'delete', methods: ['DELETE'])]
-    public function delete(Request $request, EntityManagerInterface $entityManager, Article $article, StaticHtmlHandler $htmlHandler)
+    public function delete(Request $request, EntityManagerInterface $entityManager, Article $article): Response
     {
         $submittedToken = $request->request->get('token');
 
         if ($this->isCsrfTokenValid('delete-article', $submittedToken)) {
-            $htmlHandler->deleteHtmlFile($article);
             $entityManager->remove($article);
             $entityManager->flush();
         }
