@@ -49,9 +49,21 @@
                         <div class="hidden sm:ml-6 sm:block">
                             <div class="flex space-x-4">
                                 <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                                <a href="{{url('home_index')}}" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Home</a>
-                                <a href="{{url('article_index')}}" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Articles</a>
-                                <a href="{{url('admin_article_index')}}" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Admin</a>
+                                <a href="{{url('home_index')}}"
+                                   class="{{ app.current_route == 'home_index' ? 'bg-gray-700 text-white' : 'text-gray-300'}}
+                                   hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-base font-medium">
+                                    Home
+                                </a>
+                                <a href="{{url('article_index')}}"
+                                   class="{{ app.current_route == 'article_index' or app.current_route == 'article_show' ? 'bg-gray-700 text-white' : 'text-gray-300'}}
+                                   hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-base font-medium">
+                                    Articles
+                                </a>
+                                <a href="{{url('admin_article_index')}}"
+                                   class="{{ app.current_route == 'admin_article_index' ? 'bg-gray-700 text-white' : 'text-gray-300'}}
+                                   hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-base font-medium">
+                                    Admin
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -62,9 +74,21 @@
             <div class="sm:hidden" id="mobile-menu">
                 <div class="space-y-1 px-2 pt-2 pb-3">
                     <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                    <a href="{{url('home_index')}}" class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium" aria-current="page">Home</a>
-                    <a href="{{url('article_index')}}" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Articles</a>
-                    <a href="{{url('admin_article_index')}}" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Admin</a>
+                    <a href="{{url('home_index')}}"
+                       class="{{ app.current_route == 'home_index' ? 'bg-gray-700 text-white' : 'text-gray-300'}}
+                                   block rounded-md px-3 py-2 text-base font-medium">
+                        Home
+                    </a>
+                    <a href="{{url('article_index')}}"
+                       class="{{ app.current_route == 'article_index' or app.current_route == 'article_show' ? 'bg-gray-700 text-white' : 'text-gray-300'}}
+                                   block rounded-md px-3 py-2 text-base font-medium">
+                        Articles
+                    </a>
+                    <a href="{{url('admin_article_index')}}"
+                       class="{{ app.current_route == 'admin_article_index' ? 'bg-gray-700 text-white' : 'text-gray-300'}}
+                                   block rounded-md px-3 py-2 text-base font-medium">
+                        Admin
+                    </a>
                 </div>
             </div>
         </nav>
