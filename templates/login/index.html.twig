@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Blog - Login{% endblock %}
+
+{% block body %}
+    <h1 class="text-center text-6xl font-bold mb-6">Login</h1>
+
+    {% if error %}
+        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    <form class="mx-auto max-w-2xl" action="{{ path('app_login') }}" method="post">
+        <div class="my-4">
+            <label for="username">Email:</label>
+            <input class="w-full p-2 text-gray-900" type="text" id="username" name="_username" value="{{ last_username }}">
+        </div>
+
+        <div class="my-4">
+            <label for="password">Password:</label>
+            <input class="w-full p-2 text-gray-900" type="password" id="password" name="_password">
+        <div>
+
+        <input type="hidden" name="_target_path" value="{{ path('admin_article_index') }}">
+
+        <button class="inline-block bg-blue-600 py-2 px-4 my-4 cursor-pointer" type="submit">Login</button>
+    </form>
+{% endblock %}

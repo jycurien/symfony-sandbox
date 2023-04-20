@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -59,11 +59,23 @@
                                    hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-base font-medium">
                                     Articles
                                 </a>
+                                {% if app.user %}
                                 <a href="{{url('admin_article_index')}}"
                                    class="{{ app.current_route == 'admin_article_index' ? 'bg-gray-700 text-white' : 'text-gray-300'}}
                                    hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-base font-medium">
                                     Admin
                                 </a>
+                                <a href="{{url('app_logout')}}"
+                                   class="text-orange-300 hover:bg-gray-700 hover:text-orange-200 rounded-md px-3 py-2 text-base font-medium">
+                                    Logout
+                                </a>
+                                {% else %}
+                                <a href="{{url('app_login')}}"
+                                   class="{{ app.current_route == 'app_login' ? 'bg-gray-700 text-white' : 'text-gray-300'}}
+                                   hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-base font-medium">
+                                    Login
+                                </a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
