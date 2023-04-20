@@ -26,9 +26,6 @@ class Article
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
-    #[ORM\Column(length: 300, unique: true, nullable: true)]
-    private ?string $staticUrl = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -78,18 +75,6 @@ class Article
     public function setImage(string $image): self
     {
         $this->image = $image;
-
-        return $this;
-    }
-
-    public function getStaticUrl(): ?string
-    {
-        return $this->staticUrl;
-    }
-
-    public function setStaticUrl(?string $staticUrl): self
-    {
-        $this->staticUrl = $staticUrl;
 
         return $this;
     }
